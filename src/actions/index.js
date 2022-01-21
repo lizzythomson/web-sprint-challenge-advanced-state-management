@@ -3,8 +3,8 @@ import axios from 'axios';
 export const START_FETCH = 'START_FETCH';
 export const SUCCESSFUL_FETCH = 'SUCCESSFUL_FETCH';
 export const FAILED_FETCH = 'FAILED_FETCH';
-export const ADD_SMURF = 'ADD_SMURF';
-export const ERROR_MESSAGE = 'ERROR_MESSAGE';
+export const ADD_NEW_SMURF = 'ADD_NEW_SMURF';
+export const SET_ERROR = 'SET_ERROR';
 
 export const fetchSmurfs = () => (dispatch) => {
   dispatch(fetchStart());
@@ -18,20 +18,37 @@ export const fetchSmurfs = () => (dispatch) => {
     });
 };
 
-// export const addSmurf = () => {
-//   return { type: ADD_SMURF, payload: smurf };
-// };
+export const addSmurf = (smurf) => (dispatch) => {
+  dispatch(fetchStart());
+  axios
+    .post('http://localhost:3333/smurfs', smurf)
+    .then((response) => {
+      const newSmurf = response.data[response.data.length - 1];
+      dispatch(addNewSmurf(newSmurf));
+    })
+    .catch((error) => {
+      dispatch(fetchFail(error));
+    });
+};
+
+export const addNewSmurf = (smurf) => {
+  return { type: ADD_NEW_SMURF, payload: smurf };
+};
 
 export const fetchStart = () => {
   return { type: START_FETCH };
 };
 
-export const fetchSuccess = (smurf) => {
-  return { type: SUCCESSFUL_FETCH, payload: smurf };
+export const fetchSuccess = (smurfs) => {
+  return { type: SUCCESSFUL_FETCH, payload: smurfs };
 };
 
 export const fetchFail = (errorMessage) => {
   return { type: FAILED_FETCH, payload: errorMessage };
+};
+
+export const setError = (errorMessage) => {
+  return { type: SET_ERROR, payload: errorMessage };
 };
 
 //Task List:

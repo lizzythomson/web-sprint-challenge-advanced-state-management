@@ -2,8 +2,8 @@ import {
   START_FETCH,
   SUCCESSFUL_FETCH,
   FAILED_FETCH,
-  ADD_SMURF,
-  ERROR_MESSAGE,
+  ADD_NEW_SMURF,
+  SET_ERROR,
 } from '../actions/index';
 
 export const initialState = {
@@ -15,32 +15,28 @@ export const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case START_FETCH:
-      return { ...state, smurfs: [], isLoading: true, error: '' };
+      return { ...state, isLoading: true, error: '' };
     case SUCCESSFUL_FETCH:
       return {
         ...state,
         smurfs: action.payload,
-        isFetching: false,
+        isLoading: false,
         error: '',
       };
     case FAILED_FETCH:
       return {
         ...state,
-        smurfs: [],
-        isFetching: false,
+        isLoading: false,
         error: action.payload,
       };
-    case ADD_SMURF:
-      const newSmurf = {
-        id: action.payload.id,
-        name: action.payload.name,
-        position: action.payload.position,
-        nickname: action.payload.nickname,
-        description: action.payload.description,
+    case ADD_NEW_SMURF:
+      return {
+        ...state,
+        isLoading: false,
+        smurfs: [...state.smurfs, action.payload],
       };
-      return { ...state, smurfs: [...state.smurfs, newSmurf] };
-    case ERROR_MESSAGE:
-      return state;
+    case SET_ERROR:
+      return { ...state, error: action.payload };
     default:
       return state;
   }

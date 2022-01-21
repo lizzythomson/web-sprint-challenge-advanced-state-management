@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchSmurfs } from './actions';
 
@@ -9,10 +9,11 @@ import Header from './components/Header';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-const App = (props) => {
+const App = ({ fetchSmurfs }) => {
   useEffect(() => {
-    props.fetchSmurfs();
+    fetchSmurfs();
   }, []);
+
   return (
     <div className='App'>
       <Header />
